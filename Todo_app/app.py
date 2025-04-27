@@ -8,10 +8,21 @@ from pprint import pprint
 from http import HTTPStatus
 
 # Criação de instância da aplicação FastAPI
-app = FastAPI()
+app = FastAPI(
+    title="To-Do API",
+    description="Gerenciamento de Tarefas usando CQRS",
+    version="1.0.0",
+    docs_url="/docs",
+    redoc_url="/redoc",
+)
 
 # Criação de todas as tabelas (que herdam de SQLModel - herdam funcionalidades do pydantic com do sqlalchemy) através dos metadados na base de dados Postgres
 SQLModel.metadata.create_all(engine)
+
+
+@app.get("/")
+def read_root():
+    return {"message": "API rodando!"}
 
 
 @app.post("/tasks/", status_code=HTTPStatus.CREATED, response_model=Task)
